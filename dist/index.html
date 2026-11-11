@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#15131f">
+  <meta name="description" content="压力大爆破：一款高反馈、无广告、随开随玩的打地鼠解压小游戏。">
+  <title>压力大爆破｜打飞今天的烦恼</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="压力大爆破首页">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>压力大爆破</span>
+      </a>
+      <div class="top-actions">
+        <button class="icon-btn" id="soundBtn" type="button" aria-label="关闭音效" aria-pressed="true">♫</button>
+        <button class="icon-btn" id="helpBtn" type="button" aria-label="查看玩法">?</button>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow"><span class="pulse-dot"></span> 今日情绪清理中</p>
+        <h1 id="pageTitle">别忍了，<em>开锤。</em></h1>
+        <p class="subtitle">把 Deadline、Bug 和无效会议统统锤回洞里。<br>30 秒，给大脑做一次轻量重启。</p>
+      </div>
+      <div class="streak-card" aria-label="最佳成绩">
+        <span>BEST</span>
+        <strong id="bestScore">000</strong>
+        <small>本机最高分</small>
+      </div>
+    </section>
+
+    <section class="game-shell" id="gameShell">
+      <div class="hud" aria-live="polite">
+        <div class="hud-item">
+          <span>得分 SCORE</span>
+          <strong id="score">000</strong>
+        </div>
+        <div class="timer-wrap">
+          <div class="timer-label"><span>剩余电量</span><strong id="time">30.0s</strong></div>
+          <div class="timer-track" aria-hidden="true"><i id="timerBar"></i></div>
+        </div>
+        <div class="hud-item combo-box">
+          <span>连击 COMBO</span>
+          <strong><b id="combo">0</b><small>×</small></strong>
+        </div>
+      </div>
+
+      <div class="arena-wrap">
+        <div class="arena" id="arena" role="grid" aria-label="打地鼠游戏区域">
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 1" data-index="0"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 2" data-index="1"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 3" data-index="2"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 4" data-index="3"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 5" data-index="4"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 6" data-index="5"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 7" data-index="6"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 8" data-index="7"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+          <button class="hole" type="button" role="gridcell" aria-label="洞口 9" data-index="8"><span class="rim"></span><span class="mole" aria-hidden="true"></span></button>
+        </div>
+
+        <div class="overlay is-open" id="startOverlay">
+          <div class="mascot" aria-hidden="true"><span>ಠ‿ಠ</span></div>
+          <p class="overlay-kicker">NO PRESSURE, JUST PUNCH.</p>
+          <h2>今天想锤点什么？</h2>
+          <div class="mode-pills" role="radiogroup" aria-label="游戏难度">
+            <button class="mode active" type="button" role="radio" aria-checked="true" data-mode="chill"><span>松弛局</span><small>30 秒 · 轻松上手</small></button>
+            <button class="mode" type="button" role="radio" aria-checked="false" data-mode="rage"><span>暴走局</span><small>20 秒 · 双倍速度</small></button>
+          </div>
+          <button class="start-btn" id="startBtn" type="button"><span>开始清空压力</span><b>↗</b></button>
+          <p class="microcopy">无需登录 · 没有广告 · 随时暂停</p>
+        </div>
+
+        <div class="overlay result" id="resultOverlay" hidden>
+          <p class="overlay-kicker">EMOTIONAL DAMAGE: CLEARED</p>
+          <h2 id="resultTitle">爽到了！</h2>
+          <div class="result-score"><strong id="finalScore">0</strong><span>分</span></div>
+          <p id="resultCopy">你把今天的烦恼锤了个稀碎。</p>
+          <div class="result-stats">
+            <span>命中率 <b id="accuracy">0%</b></span>
+            <span>最高连击 <b id="maxCombo">0×</b></span>
+          </div>
+          <button class="start-btn" id="againBtn" type="button"><span>再爽一局</span><b>↻</b></button>
+        </div>
+      </div>
+
+      <div class="legend" aria-label="游戏图例">
+        <span><i class="legend-face normal">⌁</i> 烦恼地鼠 <b>+1</b></span>
+        <span><i class="legend-face gold">✦</i> 金色好运 <b>+3</b></span>
+        <span><i class="legend-face cat">=^</i> 摸鱼猫猫 <b>别锤</b></span>
+        <button id="pauseBtn" type="button" disabled><i>Ⅱ</i> 暂停一下</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>TAKE A BREAK, NOT A BREAKDOWN.</p>
+      <span>建议音量 30% · 支持触屏 / 鼠标 / 键盘</span>
+    </footer>
+  </main>
+
+  <dialog id="helpDialog">
+    <button class="dialog-close" id="closeHelp" type="button" aria-label="关闭">×</button>
+    <p class="overlay-kicker">HOW TO RELEASE</p>
+    <h2>三秒上手</h2>
+    <ol>
+      <li><b>锤烦恼</b><span>地鼠冒头时点它，连续命中会叠加连击分。</span></li>
+      <li><b>追好运</b><span>金色地鼠出现时间更短，但能拿 3 分。</span></li>
+      <li><b>护猫猫</b><span>摸鱼猫是队友，误伤会扣 2 分并清空连击。</span></li>
+    </ol>
+    <p class="keyboard-tip">键盘玩家：按 1–9 对应九宫格，空格键暂停。</p>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="./game.js"></script>
+</body>
+</html>
