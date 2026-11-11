@@ -22,7 +22,7 @@
     chill: { duration: 30, minGap: 360, maxGap: 660, upMin: 620, upMax: 980, cat: .11, gold: .13 },
     rage: { duration: 20, minGap: 210, maxGap: 400, upMin: 410, upMax: 690, cat: .14, gold: .16 }
   };
-  const SKINS = { classic: '原生地鼠', boss: '加活领导', meeting: '无效会议', landlord: '催租房东' };
+  const SKINS = { classic: '原生地鼠', boss: '加活领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英' };
   const GOLD_SKINS = { classic: '原生好运', windfall: '天降横财' };
   const CAT_SKINS = { classic: '原生猫猫', slacker: '摸鱼白猫' };
   let selectedMode = 'chill';
@@ -132,7 +132,7 @@
     if (kind !== 'normal') hole.classList.add(kind);
     mole.dataset.word = kind === 'normal' ? WORDS[Math.floor(Math.random() * WORDS.length)] : '';
     mole.style.setProperty('--tilt', `${rand(-4, 4)}deg`);
-    const normalPrefix = selectedSkin === 'boss' ? '烦恼领导' : selectedSkin === 'meeting' ? '无效会议' : selectedSkin === 'landlord' ? '催租房东' : '烦恼地鼠';
+    const normalPrefix = selectedSkin === 'boss' ? '烦恼领导' : selectedSkin === 'meeting' ? '无效会议' : selectedSkin === 'landlord' ? '催租房东' : selectedSkin === 'elite' ? '傲慢精英' : '烦恼地鼠';
     const normalLabel = `${normalPrefix}：${mole.dataset.word}`;
     const goldLabel = selectedGoldSkin === 'windfall' ? '天降横财，点击得三分' : '金色好运地鼠，点击得三分';
     const catLabel = selectedCatSkin === 'slacker' ? '摸鱼白猫，请不要点击' : '摸鱼猫，请不要点击';
@@ -263,7 +263,7 @@
     const n = Number(e.key); if (n >= 1 && n <= 9) hit(holes[n - 1]);
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && running && !paused) togglePause(); });
-  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-normal.png','./assets/skins/meeting/meeting-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
+  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-normal.png','./assets/skins/meeting/meeting-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/elite/elite-normal.png','./assets/skins/elite/elite-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
   applySkin(selectedSkin, false);
   applyGoldSkin(selectedGoldSkin, false);
   applyCatSkin(selectedCatSkin, false);
