@@ -72,6 +72,11 @@
             <button class="mode active" type="button" role="radio" aria-checked="true" data-mode="chill"><span>松弛局</span><small>30 秒 · 轻松上手</small></button>
             <button class="mode" type="button" role="radio" aria-checked="false" data-mode="rage"><span>暴走局</span><small>20 秒 · 双倍速度</small></button>
           </div>
+          <button class="skin-trigger" id="skinBtn" type="button" data-skin="classic">
+            <span class="skin-trigger-avatar" aria-hidden="true"><i></i></span>
+            <span><small>地鼠形象</small><strong id="currentSkinName">原生地鼠</strong></span>
+            <b>更换 ›</b>
+          </button>
           <button class="start-btn" id="startBtn" type="button"><span>开始清空压力</span><b>↗</b></button>
           <p class="microcopy">无需登录 · 没有广告 · 随时暂停</p>
         </div>
@@ -115,6 +120,33 @@
       <li><b>护猫猫</b><span>摸鱼猫是队友，误伤会扣 2 分并清空连击。</span></li>
     </ol>
     <p class="keyboard-tip">键盘玩家：按 1–9 对应九宫格，空格键暂停。</p>
+  </dialog>
+  <dialog class="skin-dialog" id="skinDialog">
+    <button class="dialog-close" id="closeSkin" type="button" aria-label="关闭形象选择">×</button>
+    <p class="overlay-kicker">MOLE AVATAR SELECT</p>
+    <h2>今天要锤谁？</h2>
+    <p class="skin-dialog-copy">形象只改变普通烦恼目标；金色好运和摸鱼猫仍会保持醒目，避免误点。</p>
+    <div class="skin-grid" role="radiogroup" aria-label="选择地鼠形象">
+      <button class="skin-option selected" type="button" role="radio" aria-checked="true" data-skin="classic">
+        <span class="skin-card-art classic-art" aria-hidden="true"><i></i></span>
+        <span class="skin-card-copy"><strong>原生地鼠</strong><small>软萌经典 · 默认</small></span>
+        <span class="skin-check">✓</span>
+      </button>
+      <button class="skin-option" type="button" role="radio" aria-checked="false" data-skin="boss">
+        <span class="skin-card-art boss-art" aria-hidden="true">
+          <img src="./assets/skins/boss/boss-normal.png" alt="">
+          <img class="reaction" src="./assets/skins/boss/boss-hit.png" alt="">
+        </span>
+        <span class="skin-card-copy"><strong>加活领导</strong><small>正常端着 · 一锤破功</small></span>
+        <span class="skin-check">✓</span>
+      </button>
+      <button class="skin-option coming" type="button" disabled>
+        <span class="skin-card-art coming-art" aria-hidden="true">?</span>
+        <span class="skin-card-copy"><strong>下位选手</strong><small>正在排队 · 敬请期待</small></span>
+        <span class="coming-badge">COMING</span>
+      </button>
+    </div>
+    <p class="skin-note">选择会保存在当前设备，下次打开仍然有效。</p>
   </dialog>
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="./game.js"></script>

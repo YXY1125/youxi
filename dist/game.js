@@ -12,13 +12,17 @@
     resultTitle: $('#resultTitle'), resultCopy: $('#resultCopy'), toast: $('#toast'), arena: $('#arena')
   };
   ui.homeBtn = $('#homeBtn'); ui.legendHomeBtn = $('#legendHomeBtn'); ui.brandHome = $('#brandHome');
+  ui.skinBtn = $('#skinBtn'); ui.currentSkinName = $('#currentSkinName'); ui.skinDialog = $('#skinDialog');
+  ui.closeSkin = $('#closeSkin'); ui.skinOptions = [...document.querySelectorAll('.skin-option[data-skin]')];
 
   const WORDS = ['DEADLINE', 'BUG', '早八', '周报', '内耗', '已读', '开会', '改需求', 'KPI'];
   const MODES = {
     chill: { duration: 30, minGap: 360, maxGap: 660, upMin: 620, upMax: 980, cat: .11, gold: .13 },
     rage: { duration: 20, minGap: 210, maxGap: 400, upMin: 410, upMax: 690, cat: .14, gold: .16 }
   };
+  const SKINS = { classic: '原生地鼠', boss: '加活领导' };
   let selectedMode = 'chill';
+  let selectedSkin = SKINS[localStorage.getItem('stressSmashSkin')] ? localStorage.getItem('stressSmashSkin') : 'classic';
   let running = false, paused = false, soundOn = true;
   let score = 0, combo = 0, topCombo = 0, attempts = 0, hits = 0;
   let startAt = 0, pausedAt = 0, pausedTotal = 0, remaining = 0;
@@ -28,6 +32,18 @@
 
   function rand(min, max) { return Math.random() * (max - min) + min; }
   function mode() { return MODES[selectedMode]; }
+  function applySkin(skin, persist = true) {
+    selectedSkin = SKINS[skin] ? skin : 'classic';
+    ui.arena.dataset.skin = selectedSkin;
+    ui.skinBtn.dataset.skin = selectedSkin;
+    ui.currentSkinName.textContent = SKINS[selectedSkin];
+    ui.skinOptions.forEach(option => {
+      const active = option.dataset.skin === selectedSkin;
+      option.classList.toggle('selected', active);
+      option.setAttribute('aria-checked', String(active));
+    });
+    if (persist) localStorage.setItem('stressSmashSkin', selectedSkin);
+  }
   function toast(message) {
     ui.toast.textContent = message; ui.toast.classList.add('show');
     clearTimeout(toast.timer); toast.timer = setTimeout(() => ui.toast.classList.remove('show'), 1300);
@@ -87,7 +103,8 @@
     if (kind !== 'normal') hole.classList.add(kind);
     mole.dataset.word = kind === 'normal' ? WORDS[Math.floor(Math.random() * WORDS.length)] : '';
     mole.style.setProperty('--tilt', `${rand(-4, 4)}deg`);
-    hole.setAttribute('aria-label', kind === 'cat' ? '摸鱼猫，请不要点击' : kind === 'gold' ? '金色好运地鼠，点击得三分' : `烦恼地鼠：${mole.dataset.word}`);
+    const normalLabel = selectedSkin === 'boss' ? `烦恼领导：${mole.dataset.word}` : `烦恼地鼠：${mole.dataset.word}`;
+    hole.setAttribute('aria-label', kind === 'cat' ? '摸鱼猫，请不要点击' : kind === 'gold' ? '金色好运地鼠，点击得三分' : normalLabel);
     const life = rand(mode().upMin, mode().upMax) * Math.max(.64, remaining / mode().duration);
     hole.hideTimer = setTimeout(() => {
       if (hole.classList.contains('up') && hole.dataset.kind !== 'cat') combo = 0;
@@ -186,6 +203,14 @@
     selectedMode = button.dataset.mode;
     document.querySelectorAll('.mode').forEach(b => { b.classList.toggle('active', b === button); b.setAttribute('aria-checked', b === button ? 'true' : 'false'); });
   }));
+  ui.skinBtn.addEventListener('click', () => ui.skinDialog.showModal());
+  ui.closeSkin.addEventListener('click', () => ui.skinDialog.close());
+  ui.skinDialog.addEventListener('click', e => { if (e.target === ui.skinDialog) ui.skinDialog.close(); });
+  ui.skinOptions.forEach(option => option.addEventListener('click', () => {
+    applySkin(option.dataset.skin);
+    ui.skinDialog.close();
+    toast(`已换成「${SKINS[selectedSkin]}」`);
+  }));
   ui.startBtn.addEventListener('click', startGame); ui.againBtn.addEventListener('click', startGame);
   ui.homeBtn.addEventListener('click', () => goHome()); ui.legendHomeBtn.addEventListener('click', () => goHome());
   ui.brandHome.addEventListener('click', e => { e.preventDefault(); goHome(); });
@@ -194,9 +219,11 @@
   ui.helpBtn.addEventListener('click', () => ui.help.showModal()); ui.closeHelp.addEventListener('click', () => ui.help.close());
   ui.help.addEventListener('click', e => { if (e.target === ui.help) ui.help.close(); });
   window.addEventListener('keydown', e => {
-    if (e.code === 'Space' && !ui.help.open) { e.preventDefault(); togglePause(); return; }
+    if (e.code === 'Space' && !ui.help.open && !ui.skinDialog.open) { e.preventDefault(); togglePause(); return; }
     const n = Number(e.key); if (n >= 1 && n <= 9) hit(holes[n - 1]);
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && running && !paused) togglePause(); });
-  window.StressSmash = { goHome, isRunning: () => running, isAtHome: () => !running && !ui.start.hidden };
+  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png'].forEach(src => { const image = new Image(); image.src = src; });
+  applySkin(selectedSkin, false);
+  window.StressSmash = { goHome, selectSkin: applySkin, isRunning: () => running, isAtHome: () => !running && !ui.start.hidden };
 })();
