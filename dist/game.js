@@ -11,6 +11,7 @@
     finalScore: $('#finalScore'), accuracy: $('#accuracy'), maxCombo: $('#maxCombo'),
     resultTitle: $('#resultTitle'), resultCopy: $('#resultCopy'), toast: $('#toast'), arena: $('#arena')
   };
+  ui.homeBtn = $('#homeBtn'); ui.legendHomeBtn = $('#legendHomeBtn'); ui.brandHome = $('#brandHome');
 
   const WORDS = ['DEADLINE', 'BUG', '早八', '周报', '内耗', '已读', '开会', '改需求', 'KPI'];
   const MODES = {
@@ -165,6 +166,14 @@
     else { ui.resultTitle.textContent = '已松一口气'; ui.resultCopy.textContent = '状态已回弹，再来一局会更爽。'; }
     ui.result.hidden = false; tone(430,.12,'sine',.04,1.5); setTimeout(()=>tone(650,.16,'sine',.04,1.35),100);
   }
+  function goHome(showMessage = true) {
+    running = false; paused = false; clearTimeout(spawnTimer); cancelAnimationFrame(frame); clearAll();
+    score = combo = topCombo = attempts = hits = pausedTotal = 0; remaining = mode().duration;
+    ui.result.hidden = true; ui.start.hidden = false; ui.pauseBtn.disabled = true;
+    ui.shell.classList.remove('paused', 'shake'); ui.pauseBtn.innerHTML = '<i>Ⅱ</i> 暂停一下';
+    ui.time.textContent = `${mode().duration.toFixed(1)}s`; ui.bar.style.transform = 'scaleX(1)'; updateHUD();
+    if (showMessage) toast('已返回首页');
+  }
   function togglePause() {
     if (!running) return;
     paused = !paused; ui.shell.classList.toggle('paused', paused);
@@ -178,6 +187,8 @@
     document.querySelectorAll('.mode').forEach(b => { b.classList.toggle('active', b === button); b.setAttribute('aria-checked', b === button ? 'true' : 'false'); });
   }));
   ui.startBtn.addEventListener('click', startGame); ui.againBtn.addEventListener('click', startGame);
+  ui.homeBtn.addEventListener('click', () => goHome()); ui.legendHomeBtn.addEventListener('click', () => goHome());
+  ui.brandHome.addEventListener('click', e => { e.preventDefault(); goHome(); });
   ui.pauseBtn.addEventListener('click', togglePause);
   ui.soundBtn.addEventListener('click', () => { soundOn = !soundOn; ui.soundBtn.textContent = soundOn ? '♫' : '×'; ui.soundBtn.setAttribute('aria-pressed', String(soundOn)); ui.soundBtn.setAttribute('aria-label', soundOn ? '关闭音效' : '打开音效'); if (soundOn) tone(520); });
   ui.helpBtn.addEventListener('click', () => ui.help.showModal()); ui.closeHelp.addEventListener('click', () => ui.help.close());
@@ -187,4 +198,5 @@
     const n = Number(e.key); if (n >= 1 && n <= 9) hit(holes[n - 1]);
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && running && !paused) togglePause(); });
+  window.StressSmash = { goHome, isRunning: () => running, isAtHome: () => !running && !ui.start.hidden };
 })();
