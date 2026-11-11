@@ -23,10 +23,19 @@
     rage: { duration: 20, minGap: 210, maxGap: 400, upMin: 410, upMax: 690, cat: .14, gold: .16 }
   };
   const SKINS = { classic: '原生地鼠', boss: '加活领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英' };
+  const SKIN_PREFIXES = { classic: '烦恼地鼠', boss: '烦恼领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英' };
   const GOLD_SKINS = { classic: '原生好运', windfall: '天降横财' };
   const CAT_SKINS = { classic: '原生猫猫', slacker: '摸鱼白猫' };
   let selectedMode = 'chill';
-  let selectedSkin = SKINS[localStorage.getItem('stressSmashSkin')] ? localStorage.getItem('stressSmashSkin') : 'classic';
+  let selectedSkins = (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('stressSmashSkins') || '[]');
+      const valid = Array.isArray(saved) ? [...new Set(saved.filter(skin => SKINS[skin]))] : [];
+      if (valid.length) return valid;
+    } catch (_) { /* Fall back to the legacy single-skin setting. */ }
+    const legacy = localStorage.getItem('stressSmashSkin');
+    return [SKINS[legacy] ? legacy : 'classic'];
+  })();
   let selectedGoldSkin = GOLD_SKINS[localStorage.getItem('stressSmashGoldSkin')] ? localStorage.getItem('stressSmashGoldSkin') : 'windfall';
   let selectedCatSkin = CAT_SKINS[localStorage.getItem('stressSmashCatSkin')] ? localStorage.getItem('stressSmashCatSkin') : 'slacker';
   let running = false, paused = false, soundOn = true;
@@ -38,18 +47,40 @@
 
   function rand(min, max) { return Math.random() * (max - min) + min; }
   function mode() { return MODES[selectedMode]; }
-  function updateSkinSummary() { ui.currentSkinName.textContent = `${SKINS[selectedSkin]} · ${GOLD_SKINS[selectedGoldSkin]} · ${CAT_SKINS[selectedCatSkin]}`; }
-  function applySkin(skin, persist = true) {
-    selectedSkin = SKINS[skin] ? skin : 'classic';
-    ui.arena.dataset.skin = selectedSkin;
-    ui.skinBtn.dataset.skin = selectedSkin;
+  function normalSkinSummary() { return selectedSkins.length === 1 ? SKINS[selectedSkins[0]] : `混搭 ${selectedSkins.length} 款`; }
+  function updateSkinSummary() { ui.currentSkinName.textContent = `${normalSkinSummary()} · ${GOLD_SKINS[selectedGoldSkin]} · ${CAT_SKINS[selectedCatSkin]}`; }
+  function syncSkinSelection(persist = true) {
+    ui.skinBtn.dataset.skin = selectedSkins.length === 1 ? selectedSkins[0] : 'mix';
     updateSkinSummary();
     ui.skinOptions.forEach(option => {
-      const active = option.dataset.skin === selectedSkin;
+      const active = selectedSkins.includes(option.dataset.skin);
       option.classList.toggle('selected', active);
       option.setAttribute('aria-checked', String(active));
     });
-    if (persist) localStorage.setItem('stressSmashSkin', selectedSkin);
+    if (persist) {
+      localStorage.setItem('stressSmashSkins', JSON.stringify(selectedSkins));
+      localStorage.setItem('stressSmashSkin', selectedSkins[0]);
+    }
+  }
+  function applySkin(skin, persist = true) {
+    selectedSkins = [SKINS[skin] ? skin : 'classic'];
+    syncSkinSelection(persist);
+  }
+  function applySkinMix(skins, persist = true) {
+    const valid = Array.isArray(skins) ? [...new Set(skins.filter(skin => SKINS[skin]))] : [];
+    selectedSkins = valid.length ? valid : ['classic'];
+    syncSkinSelection(persist);
+  }
+  function toggleSkin(skin) {
+    if (!SKINS[skin]) return false;
+    if (selectedSkins.includes(skin)) {
+      if (selectedSkins.length === 1) return false;
+      selectedSkins = selectedSkins.filter(selected => selected !== skin);
+    } else {
+      selectedSkins = [...selectedSkins, skin];
+    }
+    syncSkinSelection(true);
+    return true;
   }
   function applyGoldSkin(skin, persist = true) {
     selectedGoldSkin = GOLD_SKINS[skin] ? skin : 'windfall';
@@ -109,6 +140,7 @@
     clearTimeout(hole.hideTimer);
     hole.classList.remove('up', 'gold', 'cat', 'hit');
     hole.dataset.kind = '';
+    delete hole.dataset.activeSkin;
     hole.querySelector('.mole').removeAttribute('data-word');
     hole.setAttribute('aria-label', `洞口 ${Number(hole.dataset.index) + 1}`);
   }
@@ -127,13 +159,14 @@
     const roll = Math.random();
     const kind = roll < mode().cat ? 'cat' : roll < mode().cat + mode().gold ? 'gold' : 'normal';
     const mole = hole.querySelector('.mole');
+    const activeSkin = kind === 'normal' ? selectedSkins[Math.floor(Math.random() * selectedSkins.length)] : '';
     hole.dataset.kind = kind;
+    if (activeSkin) hole.dataset.activeSkin = activeSkin;
     hole.classList.add('up');
     if (kind !== 'normal') hole.classList.add(kind);
     mole.dataset.word = kind === 'normal' ? WORDS[Math.floor(Math.random() * WORDS.length)] : '';
     mole.style.setProperty('--tilt', `${rand(-4, 4)}deg`);
-    const normalPrefix = selectedSkin === 'boss' ? '烦恼领导' : selectedSkin === 'meeting' ? '无效会议' : selectedSkin === 'landlord' ? '催租房东' : selectedSkin === 'elite' ? '傲慢精英' : '烦恼地鼠';
-    const normalLabel = `${normalPrefix}：${mole.dataset.word}`;
+    const normalLabel = `${SKIN_PREFIXES[activeSkin]}：${mole.dataset.word}`;
     const goldLabel = selectedGoldSkin === 'windfall' ? '天降横财，点击得三分' : '金色好运地鼠，点击得三分';
     const catLabel = selectedCatSkin === 'slacker' ? '摸鱼白猫，请不要点击' : '摸鱼猫，请不要点击';
     hole.setAttribute('aria-label', kind === 'cat' ? catLabel : kind === 'gold' ? goldLabel : normalLabel);
@@ -240,8 +273,8 @@
   ui.closeSkinDone.addEventListener('click', () => ui.skinDialog.close());
   ui.skinDialog.addEventListener('click', e => { if (e.target === ui.skinDialog) ui.skinDialog.close(); });
   ui.skinOptions.forEach(option => option.addEventListener('click', () => {
-    applySkin(option.dataset.skin);
-    toast(`已换成「${SKINS[selectedSkin]}」`);
+    if (!toggleSkin(option.dataset.skin)) { toast('普通形象至少保留一个'); return; }
+    toast(selectedSkins.length === 1 ? `当前使用「${SKINS[selectedSkins[0]]}」` : `已混搭 ${selectedSkins.length} 个普通形象`);
   }));
   ui.goldSkinOptions.forEach(option => option.addEventListener('click', () => {
     applyGoldSkin(option.dataset.goldSkin);
@@ -264,8 +297,8 @@
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && running && !paused) togglePause(); });
   ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-executive-normal.png','./assets/skins/meeting/meeting-executive-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/elite/elite-normal.png','./assets/skins/elite/elite-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
-  applySkin(selectedSkin, false);
+  syncSkinSelection(false);
   applyGoldSkin(selectedGoldSkin, false);
   applyCatSkin(selectedCatSkin, false);
-  window.StressSmash = { goHome, selectSkin: applySkin, selectGoldSkin: applyGoldSkin, selectCatSkin: applyCatSkin, isRunning: () => running, isAtHome: () => !running && !ui.start.hidden };
+  window.StressSmash = { goHome, selectSkin: applySkin, selectSkins: applySkinMix, selectGoldSkin: applyGoldSkin, selectCatSkin: applyCatSkin, isRunning: () => running, isAtHome: () => !running && !ui.start.hidden };
 })();

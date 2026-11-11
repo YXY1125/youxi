@@ -125,15 +125,15 @@
     <button class="dialog-close" id="closeSkin" type="button" aria-label="关闭形象选择">×</button>
     <p class="overlay-kicker">MOLE AVATAR SELECT</p>
     <h2>今天要锤谁？</h2>
-    <p class="skin-dialog-copy">普通烦恼、金色好运和白色摸鱼猫可以分别换装，规则与分值保持不变。</p>
-    <p class="skin-section-title">普通烦恼</p>
-    <div class="skin-grid" role="radiogroup" aria-label="选择地鼠形象">
-      <button class="skin-option selected" type="button" role="radio" aria-checked="true" data-skin="classic">
+    <p class="skin-dialog-copy">普通烦恼可以多选混搭，每次冒头都会从已选形象中随机抽取；金色好运和白色摸鱼猫仍可分别换装，规则与分值保持不变。</p>
+    <p class="skin-section-title">普通烦恼 · 可多选</p>
+    <div class="skin-grid" role="group" aria-label="选择地鼠混搭形象">
+      <button class="skin-option selected" type="button" role="checkbox" aria-checked="true" data-skin="classic">
         <span class="skin-card-art classic-art" aria-hidden="true"><i></i></span>
         <span class="skin-card-copy"><strong>原生地鼠</strong><small>软萌经典 · 默认</small></span>
         <span class="skin-check">✓</span>
       </button>
-      <button class="skin-option" type="button" role="radio" aria-checked="false" data-skin="boss">
+      <button class="skin-option" type="button" role="checkbox" aria-checked="false" data-skin="boss">
         <span class="skin-card-art boss-art" aria-hidden="true">
           <img src="./assets/skins/boss/boss-normal.png" alt="">
           <img class="reaction" src="./assets/skins/boss/boss-hit.png" alt="">
@@ -141,7 +141,7 @@
         <span class="skin-card-copy"><strong>加活领导</strong><small>正常端着 · 一锤破功</small></span>
         <span class="skin-check">✓</span>
       </button>
-      <button class="skin-option" type="button" role="radio" aria-checked="false" data-skin="meeting">
+      <button class="skin-option" type="button" role="checkbox" aria-checked="false" data-skin="meeting">
         <span class="skin-card-art meeting-art" aria-hidden="true">
           <img src="./assets/skins/meeting/meeting-executive-normal.png" alt="">
           <img class="reaction" src="./assets/skins/meeting/meeting-executive-hit.png" alt="">
@@ -149,7 +149,7 @@
         <span class="skin-card-copy"><strong>无效会议</strong><small>闭眼输出 · 一锤停麦</small></span>
         <span class="skin-check">✓</span>
       </button>
-      <button class="skin-option" type="button" role="radio" aria-checked="false" data-skin="landlord">
+      <button class="skin-option" type="button" role="checkbox" aria-checked="false" data-skin="landlord">
         <span class="skin-card-art landlord-art" aria-hidden="true">
           <img src="./assets/skins/landlord/landlord-normal.png" alt="">
           <img class="reaction" src="./assets/skins/landlord/landlord-hit.png" alt="">
@@ -157,7 +157,7 @@
         <span class="skin-card-copy"><strong>催租房东</strong><small>账单登门 · 一锤停催</small></span>
         <span class="skin-check">✓</span>
       </button>
-      <button class="skin-option" type="button" role="radio" aria-checked="false" data-skin="elite">
+      <button class="skin-option" type="button" role="checkbox" aria-checked="false" data-skin="elite">
         <span class="skin-card-art elite-art" aria-hidden="true">
           <img src="./assets/skins/elite/elite-normal.png" alt="">
           <img class="reaction" src="./assets/skins/elite/elite-hit.png" alt="">
@@ -192,7 +192,7 @@
         <span class="skin-check">✓</span>
       </button>
     </div>
-    <p class="skin-note">选择会保存在当前设备，下次打开仍然有效。</p>
+    <p class="skin-note">普通形象至少保留一个；全部选择会保存在当前设备，下次打开仍然有效。</p>
     <button class="skin-done" id="closeSkinDone" type="button">选好了，开锤 ↗</button>
   </dialog>
   <div id="toast" role="status" aria-live="polite"></div>
