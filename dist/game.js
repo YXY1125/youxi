@@ -136,6 +136,9 @@
     void ui.combo.parentElement.offsetWidth;
     if (combo) ui.combo.parentElement.classList.add('combo-pop');
   }
+  function updatePauseButton(isPaused = false) {
+    ui.pauseBtn.innerHTML = `<i>${isPaused ? '▶' : 'Ⅱ'}</i><span><small>GAME CONTROL</small>${isPaused ? '继续开锤' : '暂停一下'}</span>`;
+  }
   function clearHole(hole) {
     clearTimeout(hole.hideTimer);
     hole.classList.remove('up', 'gold', 'cat', 'hit');
@@ -234,7 +237,7 @@
     score = combo = topCombo = attempts = hits = pausedTotal = 0; remaining = mode().duration;
     running = true; paused = false; startAt = performance.now();
     ui.start.hidden = true; ui.result.hidden = true; ui.pauseBtn.disabled = false;
-    ui.shell.classList.remove('paused'); ui.pauseBtn.innerHTML = '<i>Ⅱ</i> 暂停一下';
+    ui.shell.classList.remove('paused'); updatePauseButton();
     updateHUD(); tone(260, .1, 'sine', .04, 2); scheduleSpawn(380); frame = requestAnimationFrame(tick);
   }
   function finish() {
@@ -252,15 +255,15 @@
     running = false; paused = false; clearTimeout(spawnTimer); cancelAnimationFrame(frame); clearAll();
     score = combo = topCombo = attempts = hits = pausedTotal = 0; remaining = mode().duration;
     ui.result.hidden = true; ui.start.hidden = false; ui.pauseBtn.disabled = true;
-    ui.shell.classList.remove('paused', 'shake'); ui.pauseBtn.innerHTML = '<i>Ⅱ</i> 暂停一下';
+    ui.shell.classList.remove('paused', 'shake'); updatePauseButton();
     ui.time.textContent = `${mode().duration.toFixed(1)}s`; ui.bar.style.transform = 'scaleX(1)'; updateHUD();
     if (showMessage) toast('已返回首页');
   }
   function togglePause() {
     if (!running) return;
     paused = !paused; ui.shell.classList.toggle('paused', paused);
-    if (paused) { pausedAt = performance.now(); clearTimeout(spawnTimer); clearAll(); ui.pauseBtn.innerHTML = '<i>▶</i> 继续开锤'; toast('暂停一下也没关系'); }
-    else { pausedTotal += performance.now() - pausedAt; scheduleSpawn(350); ui.pauseBtn.innerHTML = '<i>Ⅱ</i> 暂停一下'; toast('继续清空压力'); }
+    if (paused) { pausedAt = performance.now(); clearTimeout(spawnTimer); clearAll(); updatePauseButton(true); toast('暂停一下也没关系'); }
+    else { pausedTotal += performance.now() - pausedAt; scheduleSpawn(350); updatePauseButton(); toast('继续清空压力'); }
   }
 
   holes.forEach(hole => hole.addEventListener('pointerdown', () => hit(hole)));
