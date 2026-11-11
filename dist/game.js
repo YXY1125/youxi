@@ -22,8 +22,8 @@
     chill: { duration: 30, minGap: 360, maxGap: 660, upMin: 620, upMax: 980, cat: .11, gold: .13 },
     rage: { duration: 20, minGap: 210, maxGap: 400, upMin: 410, upMax: 690, cat: .14, gold: .16 }
   };
-  const SKINS = { classic: '原生地鼠', boss: '加活领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英' };
-  const SKIN_PREFIXES = { classic: '烦恼地鼠', boss: '烦恼领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英' };
+  const SKINS = { classic: '原生地鼠', boss: '加活领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英', auntie: '催婚大姨' };
+  const SKIN_PREFIXES = { classic: '烦恼地鼠', boss: '烦恼领导', meeting: '无效会议', landlord: '催租房东', elite: '傲慢精英', auntie: '催婚大姨' };
   const GOLD_SKINS = { classic: '原生好运', windfall: '天降横财' };
   const CAT_SKINS = { classic: '原生猫猫', slacker: '摸鱼白猫' };
   let selectedMode = 'chill';
@@ -218,7 +218,7 @@
       haptic(kind === 'gold' ? [15,25,15] : 12);
     }
     playHit(kind); updateHUD();
-    setTimeout(() => clearHole(hole), 210);
+    setTimeout(() => clearHole(hole), 360);
   }
 
   function tick(now) {
@@ -299,7 +299,7 @@
     const n = Number(e.key); if (n >= 1 && n <= 9) hit(holes[n - 1]);
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && running && !paused) togglePause(); });
-  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-executive-normal.png','./assets/skins/meeting/meeting-executive-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/elite/elite-normal.png','./assets/skins/elite/elite-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
+  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-executive-normal.png','./assets/skins/meeting/meeting-executive-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/elite/elite-normal.png','./assets/skins/elite/elite-hit.png','./assets/skins/auntie/auntie-normal.png','./assets/skins/auntie/auntie-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
   syncSkinSelection(false);
   applyGoldSkin(selectedGoldSkin, false);
   applyCatSkin(selectedCatSkin, false);
