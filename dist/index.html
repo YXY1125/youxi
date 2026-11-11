@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#15131f">
-  <meta name="description" content="压力大爆破：一款高反馈、无广告、随开随玩的打地鼠解压小游戏。">
-  <title>压力大爆破｜打飞今天的烦恼</title>
+  <meta name="description" content="鸭梨大！一款高反馈、无广告、随开随玩的打地鼠解压小游戏。">
+  <title>鸭梨大！｜打飞今天的烦恼</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
     <header class="topbar">
       <a class="brand" id="brandHome" href="#" aria-label="返回游戏首页">
         <span class="brand-mark" aria-hidden="true">✦</span>
-        <span>压力大爆破</span>
+        <span>鸭梨大！</span>
       </a>
       <div class="top-actions">
         <button class="icon-btn" id="soundBtn" type="button" aria-label="关闭音效" aria-pressed="true">♫</button>
@@ -67,7 +67,7 @@
         <div class="overlay is-open" id="startOverlay">
           <div class="mascot" aria-hidden="true"><span>ಠ‿ಠ</span></div>
           <p class="overlay-kicker">NO PRESSURE, JUST PUNCH.</p>
-          <h2>今天想锤点什么？</h2>
+          <h2>告诉我！谁惹你了？</h2>
           <div class="mode-pills" role="radiogroup" aria-label="游戏难度">
             <button class="mode active" type="button" role="radio" aria-checked="true" data-mode="chill"><span>松弛局</span><small>30 秒 · 轻松上手</small></button>
             <button class="mode" type="button" role="radio" aria-checked="false" data-mode="rage"><span>暴走局</span><small>20 秒 · 双倍速度</small></button>
@@ -95,12 +95,16 @@
         </div>
       </div>
 
-      <div class="legend" aria-label="游戏图例">
-        <span><i class="legend-face normal">⌁</i> 烦恼地鼠 <b>+1</b></span>
-        <span><i class="legend-face gold">✦</i> 金色好运 <b>+3</b></span>
-        <span><i class="legend-face cat">=^</i> 摸鱼猫猫 <b>别锤</b></span>
-        <button id="pauseBtn" type="button" disabled><i>Ⅱ</i> 暂停一下</button>
-        <button class="legend-home" id="legendHomeBtn" type="button"><i>⌂</i> 返回首页</button>
+      <div class="game-rules">
+        <p class="rule-shout"><span aria-hidden="true">!</span>甭管啥规则了，打它！</p>
+        <div class="legend" aria-label="游戏图例">
+          <span><i class="legend-face normal">⌁</i> 烦恼地鼠 <b>+1</b></span>
+          <span><i class="legend-face gold">✦</i> 金色好运 <b>+3</b></span>
+          <span><i class="legend-face cat">=^</i> 摸鱼猫猫 <b>别锤</b></span>
+          <button id="pauseBtn" type="button" disabled><i>Ⅱ</i> 暂停一下</button>
+          <button class="legend-home" id="legendHomeBtn" type="button"><i>⌂</i> 返回首页</button>
+        </div>
+        <p class="rule-note"><span>小声说：</span>请放过那只猫~招财这块它已经尽力了~</p>
       </div>
     </section>
 

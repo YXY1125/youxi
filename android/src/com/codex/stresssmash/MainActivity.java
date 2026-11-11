@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         webView.setLongClickable(false);
         webView.setHapticFeedbackEnabled(true);
-        webView.setContentDescription("压力大爆破打地鼠游戏");
+        webView.setContentDescription("鸭梨大打地鼠游戏");
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
