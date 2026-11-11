@@ -13,7 +13,10 @@
   <main class="app">
     <header class="topbar">
       <a class="brand" id="brandHome" href="#" aria-label="返回游戏首页">
-        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span class="brand-mark brand-avatar" aria-hidden="true">
+          <img src="./assets/skins/meeting/meeting-executive-normal.png" alt="">
+          <i>!</i>
+        </span>
         <span>鸭梨大！</span>
       </a>
       <div class="top-actions">
@@ -26,7 +29,7 @@
       <div>
         <p class="eyebrow"><span class="pulse-dot"></span> 今日情绪清理中</p>
         <h1 id="pageTitle">别忍了，<em>开锤。</em></h1>
-        <p class="subtitle">把 Deadline、Bug 和无效会议统统锤回洞里。<br>30 秒，给大脑做一次轻量重启。</p>
+        <p class="subtitle">把烦心事统统锤回洞里。<br>30 秒，给大脑做一次轻量重启。</p>
       </div>
       <div class="streak-card" aria-label="最佳成绩">
         <span>BEST</span>
@@ -65,7 +68,12 @@
         </div>
 
         <div class="overlay is-open" id="startOverlay">
-          <div class="mascot" aria-hidden="true"><span>ಠ‿ಠ</span></div>
+          <div class="target-board" aria-hidden="true">
+            <span class="target-avatar target-boss"><img src="./assets/skins/boss/boss-normal.png" alt=""></span>
+            <span class="target-avatar target-meeting"><img src="./assets/skins/meeting/meeting-executive-normal.png" alt=""></span>
+            <span class="target-avatar target-elite"><img src="./assets/skins/elite/elite-normal.png" alt=""></span>
+            <b>待锤名单</b>
+          </div>
           <p class="overlay-kicker">NO PRESSURE, JUST PUNCH.</p>
           <h2>告诉我！谁惹你了？</h2>
           <div class="mode-pills" role="radiogroup" aria-label="游戏难度">
