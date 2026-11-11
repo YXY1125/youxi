@@ -125,7 +125,8 @@
     <button class="dialog-close" id="closeSkin" type="button" aria-label="关闭形象选择">×</button>
     <p class="overlay-kicker">MOLE AVATAR SELECT</p>
     <h2>今天要锤谁？</h2>
-    <p class="skin-dialog-copy">形象只改变普通烦恼目标；金色好运和摸鱼猫仍会保持醒目，避免误点。</p>
+    <p class="skin-dialog-copy">普通烦恼与金色好运可以分别换装；摸鱼猫保持原样，避免误点。</p>
+    <p class="skin-section-title">普通烦恼</p>
     <div class="skin-grid" role="radiogroup" aria-label="选择地鼠形象">
       <button class="skin-option selected" type="button" role="radio" aria-checked="true" data-skin="classic">
         <span class="skin-card-art classic-art" aria-hidden="true"><i></i></span>
@@ -146,7 +147,21 @@
         <span class="coming-badge">COMING</span>
       </button>
     </div>
+    <p class="skin-section-title gold-section-title">金色好运</p>
+    <div class="skin-grid gold-skin-grid" role="radiogroup" aria-label="选择金色好运形象">
+      <button class="skin-option" type="button" role="radio" aria-checked="false" data-gold-skin="classic">
+        <span class="skin-card-art gold-classic-art" aria-hidden="true"><i>✦</i></span>
+        <span class="skin-card-copy"><strong>原生好运</strong><small>经典金色 · 清晰醒目</small></span>
+        <span class="skin-check">✓</span>
+      </button>
+      <button class="skin-option selected" type="button" role="radio" aria-checked="true" data-gold-skin="windfall">
+        <span class="skin-card-art windfall-art" aria-hidden="true"><img src="./assets/skins/gold/windfall.png" alt=""></span>
+        <span class="skin-card-copy"><strong>天降横财</strong><small>钞票金币 · 好运砸脸</small></span>
+        <span class="skin-check">✓</span>
+      </button>
+    </div>
     <p class="skin-note">选择会保存在当前设备，下次打开仍然有效。</p>
+    <button class="skin-done" id="closeSkinDone" type="button">选好了，开锤 ↗</button>
   </dialog>
   <div id="toast" role="status" aria-live="polite"></div>
   <script src="./game.js"></script>
