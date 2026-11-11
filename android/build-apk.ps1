@@ -63,6 +63,26 @@ try {
         "classes.dex",
         [System.IO.Compression.CompressionLevel]::Optimal
     ) | Out-Null
+
+    # aapt2 on Windows may keep backslashes in nested asset entry names.
+    # Android's AssetManager and file:///android_asset URLs require forward slashes.
+    $WindowsPathEntries = @($ApkZip.Entries | Where-Object { $_.FullName.Contains([char]92) })
+    foreach ($Entry in $WindowsPathEntries) {
+        $NormalizedName = $Entry.FullName.Replace([char]92, [char]47)
+        $NormalizedEntry = $ApkZip.CreateEntry(
+            $NormalizedName,
+            [System.IO.Compression.CompressionLevel]::Optimal
+        )
+        $SourceStream = $Entry.Open()
+        $DestinationStream = $NormalizedEntry.Open()
+        try {
+            $SourceStream.CopyTo($DestinationStream)
+        } finally {
+            $DestinationStream.Dispose()
+            $SourceStream.Dispose()
+        }
+        $Entry.Delete()
+    }
 } finally {
     $ApkZip.Dispose()
 }
@@ -82,6 +102,23 @@ $OutputDir = Split-Path -Parent $ResolvedOutput
 New-Item -ItemType Directory -Force $OutputDir | Out-Null
 & $ApkSigner sign --ks $Keystore --ks-pass pass:android --key-pass pass:android --out $ResolvedOutput $AlignedApk
 if ($LASTEXITCODE -ne 0) { throw "apksigner failed" }
+
+$PackagedApk = [System.IO.Compression.ZipFile]::OpenRead($ResolvedOutput)
+try {
+    $InvalidEntry = $PackagedApk.Entries | Where-Object { $_.FullName.Contains([char]92) } | Select-Object -First 1
+    if ($InvalidEntry) { throw "APK contains a Windows-style asset path: $($InvalidEntry.FullName)" }
+
+    $DistRoot = (Resolve-Path (Join-Path $ProjectRoot "dist")).Path
+    $ExpectedAssets = Get-ChildItem -LiteralPath $DistRoot -File -Recurse
+    foreach ($Asset in $ExpectedAssets) {
+        $RelativePath = [System.IO.Path]::GetRelativePath($DistRoot, $Asset.FullName).Replace([char]92, [char]47)
+        $EntryName = "assets/$RelativePath"
+        if (-not $PackagedApk.GetEntry($EntryName)) { throw "APK is missing bundled asset: $EntryName" }
+    }
+} finally {
+    $PackagedApk.Dispose()
+}
+
 & $ApkSigner verify --verbose --print-certs $ResolvedOutput
 if ($LASTEXITCODE -ne 0) { throw "APK signature verification failed" }
 
