@@ -263,7 +263,7 @@
     const n = Number(e.key); if (n >= 1 && n <= 9) hit(holes[n - 1]);
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && running && !paused) togglePause(); });
-  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-normal.png','./assets/skins/meeting/meeting-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/elite/elite-normal.png','./assets/skins/elite/elite-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
+  ['./assets/skins/boss/boss-normal.png','./assets/skins/boss/boss-hit.png','./assets/skins/meeting/meeting-executive-normal.png','./assets/skins/meeting/meeting-executive-hit.png','./assets/skins/landlord/landlord-normal.png','./assets/skins/landlord/landlord-hit.png','./assets/skins/elite/elite-normal.png','./assets/skins/elite/elite-hit.png','./assets/skins/gold/windfall.png','./assets/skins/cat/slacker-cat.png'].forEach(src => { const image = new Image(); image.src = src; });
   applySkin(selectedSkin, false);
   applyGoldSkin(selectedGoldSkin, false);
   applyCatSkin(selectedCatSkin, false);
